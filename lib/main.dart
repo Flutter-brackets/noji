@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/constants/app_constants.dart';
@@ -5,10 +6,14 @@ import 'core/services/cache_helper.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'features/splash/presentation/screens/splash_screen.dart';
+import 'features/webview/data/webview_prewarmer.dart';
+import 'features/webview/data/webview_timing.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WebviewTiming.init();
   await CacheHelper.init();
+  unawaited(WebviewPrewarmer.prewarm());
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

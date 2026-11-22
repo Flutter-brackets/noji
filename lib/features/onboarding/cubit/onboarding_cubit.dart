@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noji/core/services/cache_helper.dart';
 import 'package:noji/features/onboarding/cubit/onboarding_state.dart';
 import 'package:noji/features/onboarding/models/onboarding_item.dart';
-import 'package:noji/features/webview/presentation/screens/main_webview_placeholder_screen.dart';
+import 'package:noji/features/webview/presentation/screens/main_webview_screen.dart';
 
 class OnboardingCubit extends Cubit<OnboardingState> {
   final PageController pageController = PageController();
@@ -30,7 +30,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder<void>(
         transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (_, _, _) => const MainWebViewPlaceholderScreen(),
+        pageBuilder: (_, _, _) => const MainWebViewScreen(),
         transitionsBuilder: (_, Animation<double> anim, _, Widget child) {
           return FadeTransition(opacity: anim, child: child);
         },

@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noji/core/constants/app_constants.dart';
 import 'package:noji/core/services/cache_helper.dart';
+import 'package:noji/features/privacy/presentation/screens/privacy_policy_screen.dart';
 import 'package:noji/features/splash/presentation/screens/splash_screen.dart';
 import 'package:noji/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,5 +28,19 @@ void main() {
 
     // Verifies transition to onboarding slides
     expect(find.text('أناقة تُرتدى بثقة'), findsOneWidget);
+  });
+
+  testWidgets('PrivacyPolicyScreen renders correctly with required sections',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Directionality(
+          textDirection: TextDirection.rtl,
+          child: PrivacyPolicyScreen(),
+        ),
+      ),
+    );
+    expect(find.text('سياسة الخصوصية'), findsWidgets);
+    expect(find.text('لا نبيع بياناتك'), findsOneWidget);
   });
 }

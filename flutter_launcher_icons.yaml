@@ -1,0 +1,14 @@
+flutter_launcher_icons:
+  image_path: "assets/images/app_icon.png"
+  android: true
+  adaptive_icon_background: "#0C4A3E"
+  adaptive_icon_foreground: "assets/images/splash_logo.png"
+  adaptive_icon_monochrome: "assets/images/splash_logo.png"
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false

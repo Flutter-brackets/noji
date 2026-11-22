@@ -6,7 +6,7 @@ import 'package:noji/features/splash/cubit/splash_cubit.dart';
 import 'package:noji/features/splash/cubit/splash_state.dart';
 import 'package:noji/features/splash/presentation/widgets/animated_gold_line.dart';
 import 'package:noji/features/splash/presentation/widgets/animated_logo.dart';
-import 'package:noji/features/webview/presentation/screens/main_webview_placeholder_screen.dart';
+import 'package:noji/features/webview/presentation/screens/main_webview_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -74,9 +74,8 @@ class _SplashViewState extends State<_SplashView>
     if (!mounted) return;
     final bool toHome =
         context.read<SplashCubit>().state is SplashNavigateToHome;
-    final Widget dest = toHome
-        ? const MainWebViewPlaceholderScreen()
-        : const OnboardingScreen();
+    final Widget dest =
+        toHome ? const MainWebViewScreen() : const OnboardingScreen();
 
     Navigator.of(context).pushReplacement(
       PageRouteBuilder<void>(

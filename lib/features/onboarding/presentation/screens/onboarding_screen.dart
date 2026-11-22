@@ -6,6 +6,7 @@ import 'package:noji/features/onboarding/cubit/onboarding_state.dart';
 import 'package:noji/features/onboarding/models/onboarding_item.dart';
 import 'package:noji/features/onboarding/presentation/widgets/line_page_indicator.dart';
 import 'package:noji/features/onboarding/presentation/widgets/onboarding_button.dart';
+import 'package:noji/features/onboarding/presentation/widgets/onboarding_privacy_link.dart';
 import 'package:noji/features/onboarding/presentation/widgets/onboarding_slide.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -26,8 +27,8 @@ class _OnboardingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final OnboardingCubit cubit = context.read<OnboardingCubit>();
-    final double topPadding = MediaQuery.paddingOf(context).top;
-    final double bottomPadding = MediaQuery.paddingOf(context).bottom;
+    final double topPad = MediaQuery.paddingOf(context).top;
+    final double bottomPad = MediaQuery.paddingOf(context).bottom;
 
     return Scaffold(
       backgroundColor: AppColors.softCream,
@@ -37,14 +38,14 @@ class _OnboardingView extends StatelessWidget {
             controller: cubit.pageController,
             itemCount: OnboardingItem.items.length,
             onPageChanged: cubit.onPageChanged,
-            itemBuilder: (_, int index) => OnboardingSlide(
-              item: OnboardingItem.items[index],
-              index: index,
+            itemBuilder: (_, int i) => OnboardingSlide(
+              item: OnboardingItem.items[i],
+              index: i,
               pageController: cubit.pageController,
             ),
           ),
           Positioned(
-            top: topPadding + 14,
+            top: topPad + 14,
             left: 20,
             child: TextButton(
               onPressed: () => cubit.complete(context),
@@ -66,7 +67,7 @@ class _OnboardingView extends StatelessWidget {
           Positioned(
             left: 24,
             right: 24,
-            bottom: bottomPadding + 20,
+            bottom: bottomPad + 20,
             child: BlocBuilder<OnboardingCubit, OnboardingState>(
               builder: (BuildContext ctx, OnboardingState state) {
                 return Column(
@@ -76,7 +77,12 @@ class _OnboardingView extends StatelessWidget {
                       count: OnboardingItem.items.length,
                       currentIndex: state.currentIndex,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
+                    if (state.isLastPage) ...<Widget>[
+                      const OnboardingPrivacyLink(),
+                      const SizedBox(height: 14),
+                    ] else
+                      const SizedBox(height: 4),
                     OnboardingButton(
                       isLastPage: state.isLastPage,
                       onPressed: () {
