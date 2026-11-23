@@ -35,6 +35,12 @@
 		<string>يحتاج تطبيق نوجي إلى الوصول للكاميرا لالتقاط وإرفاق الصور عند الحاجة.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>يحتاج تطبيق نوجي إلى الوصول لمعرض الصور لاختيار وإرفاق الصور عند الحاجة.</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>remote-notification</string>
+		</array>
+		<key>OneSignal_suppress_launch_urls</key>
+		<true/>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>UIApplicationSceneManifest</key>

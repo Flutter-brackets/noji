@@ -20,3 +20,10 @@
 -keepclassmembers class * extends android.webkit.WebChromeClient {
     <methods>;
 }
+
+# OneSignal ProGuard rules
+-keep class com.onesignal.** { *; }
+-dontwarn com.onesignal.**
+-keep class androidx.work.** { *; }
+-keep class com.google.firebase.** { *; }
+-dontwarn com.google.firebase.messaging.**

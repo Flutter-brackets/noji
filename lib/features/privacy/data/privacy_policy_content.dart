@@ -2,7 +2,7 @@ import 'package:noji/features/privacy/data/policy_section.dart';
 import 'package:noji/features/privacy/data/privacy_policy_content_2.dart';
 
 abstract final class PrivacyPolicyContent {
-  static const String lastUpdated = '22 نوفمبر 2026';
+  static const String lastUpdated = '23 نوفمبر 2026';
   static const String supportEmail = 'support@nojiksa.com';
   static const String supportPhone = '+966XXXXXXXXX';
 
@@ -21,6 +21,7 @@ abstract final class PrivacyPolicyContent {
         'بيانات التوصيل: العنوان والمدينة ومعلومات الاستلام.',
         'بيانات الطلبات: المنتجات المشتراة وحالة الطلب وسجل المشتريات.',
         'بيانات الجهاز والاستخدام: نوع الجهاز ونظام التشغيل وطريقة تفاعلكِ مع التطبيق، لتحسين الأداء.',
+        'معرّف الجهاز ورمز الإشعارات (Push Token) لتمكين إرسال الإشعارات إليكِ.',
       ],
     ),
     PolicySection(
@@ -45,7 +46,7 @@ abstract final class PrivacyPolicyContent {
       number: '٠٤',
       title: 'مشاركة المعلومات',
       paragraphs: <String>[
-        'لا نبيع بياناتكِ الشخصية ولا نؤجرها. قد نشاركها فقط مع: منصة المتجر الإلكتروني (زد) لتشغيل المتجر والحساب والطلبات، وشركات الشحن لتوصيل طلباتكِ، وبوابات الدفع لإتمام الشراء، والجهات الرسمية عند وجود التزام نظامي.',
+        'لا نبيع بياناتكِ الشخصية ولا نؤجرها. قد نشاركها فقط مع: منصة المتجر الإلكتروني (زد) لتشغيل المتجر والحساب والطلبات، وشركات الشحن لتوصيل طلباتكِ، وبوابات الدفع لإتمام الشراء، ومزوّد خدمة الإشعارات (OneSignal) لإرسال الإشعارات إلى جهازكِ، والجهات الرسمية عند وجود التزام نظامي.',
       ],
     ),
     PolicySection(
@@ -53,6 +54,7 @@ abstract final class PrivacyPolicyContent {
       title: 'أذونات التطبيق',
       bullets: <String>[
         'الكاميرا والصور: تُطلب فقط عند رغبتكِ برفع صورة داخل المتجر، ولا نصل إليها دون موافقتكِ.',
+        'الإشعارات: تُطلب بموافقتكِ لإبلاغكِ بالتشكيلات الجديدة والعروض، ويمكنكِ إيقافها في أي وقت من إعدادات الجهاز.',
         'الإنترنت: ضروري لتشغيل التطبيق وتصفح المتجر.',
       ],
     ),

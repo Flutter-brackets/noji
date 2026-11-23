@@ -25,14 +25,10 @@ class NavBarStyle {
   static const NavBarStyle current = softGreen;
 
   static const NavBarStyle softGreen = NavBarStyle(
-    backgroundColor: Color(0xFF2F4F46),
+    backgroundColor: Color(0xFF0A4641),
     border: null,
     shadows: <BoxShadow>[
-      BoxShadow(
-        color: Color(0x1A000000),
-        blurRadius: 18,
-        offset: Offset(0, 4),
-      ),
+      BoxShadow(color: Color(0x1A000000), blurRadius: 18, offset: Offset(0, 4)),
     ],
     borderRadius: 26.0,
     activeIconColor: Color(0xFFE0BF98),
@@ -47,11 +43,7 @@ class NavBarStyle {
       BorderSide(color: Color(0xFFE4DCCF), width: 1.0),
     ),
     shadows: <BoxShadow>[
-      BoxShadow(
-        color: Color(0x12000000),
-        blurRadius: 18,
-        offset: Offset(0, 4),
-      ),
+      BoxShadow(color: Color(0x12000000), blurRadius: 18, offset: Offset(0, 4)),
     ],
     borderRadius: 26.0,
     activeIconColor: AppColors.primaryEmerald,
@@ -66,11 +58,7 @@ class NavBarStyle {
       BorderSide(color: Color(0x59D4A373), width: 1.0),
     ),
     shadows: <BoxShadow>[
-      BoxShadow(
-        color: Color(0x26000000),
-        blurRadius: 18,
-        offset: Offset(0, 4),
-      ),
+      BoxShadow(color: Color(0x26000000), blurRadius: 18, offset: Offset(0, 4)),
     ],
     borderRadius: 26.0,
     activeIconColor: AppColors.warmGold,

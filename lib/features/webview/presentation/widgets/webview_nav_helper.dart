@@ -56,4 +56,8 @@ abstract final class WebviewNavHelper {
         ? await controller?.goBack()
         : SystemNavigator.pop();
   }
+
+  static void openUrl(InAppWebViewController? controller, String url) {
+    controller?.loadUrl(urlRequest: URLRequest(url: WebUri(url)));
+  }
 }

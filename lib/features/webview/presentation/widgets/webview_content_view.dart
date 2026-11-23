@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:noji/core/services/notification_prompt_manager.dart';
+import 'package:noji/core/services/onesignal_service.dart';
 import 'package:noji/core/theme/app_colors.dart';
-import 'package:noji/features/webview/data/nav_routes.dart';
 import 'package:noji/features/webview/presentation/cubit/webview_cubit.dart';
-import 'package:noji/features/webview/presentation/cubit/webview_state.dart';
-import 'package:noji/features/webview/presentation/widgets/bottom_nav/solid_bottom_nav_bar.dart';
-import 'package:noji/features/webview/presentation/widgets/webview_browser_pane.dart';
+import 'package:noji/features/webview/presentation/widgets/webview_bottom_bar_connector.dart';
 import 'package:noji/features/webview/presentation/widgets/webview_nav_helper.dart';
-import 'package:noji/features/webview/presentation/widgets/webview_status_overlay.dart';
+import 'package:noji/features/webview/presentation/widgets/webview_stack_pane.dart';
 import 'package:noji/features/webview/presentation/widgets/webview_top_strip.dart';
 
 class WebviewContentView extends StatefulWidget {
@@ -21,9 +20,9 @@ class WebviewContentView extends StatefulWidget {
 
 class _WebviewContentViewState extends State<WebviewContentView> {
   InAppWebViewController? _controller;
-  late final Widget _browserPane;
+  bool _promptScheduled = false;
 
-  static const SystemUiOverlayStyle _overlayStyle = SystemUiOverlayStyle(
+  static const SystemUiOverlayStyle _style = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,
     statusBarBrightness: Brightness.light,
@@ -32,71 +31,62 @@ class _WebviewContentViewState extends State<WebviewContentView> {
   @override
   void initState() {
     super.initState();
-    final WebviewCubit cubit = context.read<WebviewCubit>();
-    _browserPane = RepaintBoundary(
-      child: WebviewBrowserPane(
-        onControllerCreated: (c) {
-          _controller = c;
-          cubit.attachController(c);
-        },
-        onLoadStart: (u) => cubit.onLoadStart(u),
-        onLoadStop: (u) {
-          cubit.onLoadStop(u);
-          WebviewNavHelper.verifyLayout(_controller);
-        },
-        onUpdateVisitedHistory: (u) => cubit.updateUrl(u),
-        onReceivedError: () => cubit.setOffline(true),
-        onDrawerChanged: (open) => cubit.setDrawerOpen(open),
-      ),
-    );
+    OneSignalService.registerUrlHandler(
+        (u) => WebviewNavHelper.openUrl(_controller, u));
+  }
+
+  void _onLoadStop(String? u) {
+    context.read<WebviewCubit>().onLoadStop(u);
+    WebviewNavHelper.verifyLayout(_controller);
+    if (_promptScheduled) return;
+    _promptScheduled = true;
+    Future<void>.delayed(const Duration(seconds: 3), () {
+      if (mounted) NotificationPromptManager.checkAndPrompt(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    OneSignalService.unregisterUrlHandler();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double topInset = MediaQuery.viewPaddingOf(context).top;
-    final double bottomInset = MediaQuery.viewPaddingOf(context).bottom;
-    final EdgeInsets pad = MediaQuery.paddingOf(context);
+    final MediaQueryData mq = MediaQuery.of(context);
+    final WebviewCubit cubit = context.read<WebviewCubit>();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: _overlayStyle,
+      value: _style,
       child: PopScope(
         canPop: false,
-        onPopInvokedWithResult: (bool didPop, _) =>
-            WebviewNavHelper.handlePop(_controller, didPop),
+        onPopInvokedWithResult: (d, _) =>
+            WebviewNavHelper.handlePop(_controller, d),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: AppColors.softCream,
           body: Padding(
-            padding: EdgeInsets.only(left: pad.left, right: pad.right),
+            padding: EdgeInsets.symmetric(horizontal: mq.padding.left),
             child: Column(
               children: <Widget>[
-                WebviewTopStrip(topInset: topInset),
+                WebviewTopStrip(topInset: mq.viewPadding.top),
                 Expanded(
-                  child: Stack(
-                    children: <Widget>[
-                      _browserPane,
-                      WebviewStatusOverlay(onRetry: () {
-                        context.read<WebviewCubit>().setOffline(false);
-                        _controller?.reload();
-                      }),
-                    ],
+                  child: WebviewStackPane(
+                    cubit: cubit,
+                    onControllerCreated: (c) {
+                      _controller = c;
+                      cubit.attachController(c);
+                    },
+                    onLoadStop: _onLoadStop,
+                    onRetry: () {
+                      cubit.setOffline(false);
+                      _controller?.reload();
+                    },
                   ),
                 ),
-                BlocBuilder<WebviewCubit, WebviewState>(
-                  buildWhen: (p, c) =>
-                      p.isDrawerOpen != c.isDrawerOpen ||
-                      p.currentUrl != c.currentUrl,
-                  builder: (ctx, state) {
-                    final NavTab? tab =
-                        NavRoutes.getTabFromUrl(state.currentUrl);
-                    return SolidBottomNavBar(
-                      activeTab: tab,
-                      onTabSelected: (t) =>
-                          WebviewNavHelper.handleTabTap(_controller, t, tab),
-                      isDrawerOpen: state.isDrawerOpen,
-                      bottomInset: bottomInset,
-                    );
-                  },
+                WebviewBottomBarConnector(
+                  controller: _controller,
+                  bottomInset: mq.viewPadding.bottom,
                 ),
               ],
             ),

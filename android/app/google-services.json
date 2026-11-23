@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "535127904420",
+    "project_id": "noji-eb869",
+    "storage_bucket": "noji-eb869.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535127904420:android:cb22b2ab86e521c89d5631",
+        "android_client_info": {
+          "package_name": "com.brackets.noji"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5UHfLi9v16xrHLqvuH5pBOKdSbiqJSA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
