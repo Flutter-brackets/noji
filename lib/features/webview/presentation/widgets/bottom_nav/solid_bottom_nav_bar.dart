@@ -11,6 +11,7 @@ class SolidBottomNavBar extends StatelessWidget {
     required this.onTabSelected,
     required this.isDrawerOpen,
     required this.bottomInset,
+    this.isEnglish = false,
     this.style = NavBarStyle.current,
     super.key,
   });
@@ -19,6 +20,7 @@ class SolidBottomNavBar extends StatelessWidget {
   final ValueChanged<NavTab> onTabSelected;
   final bool isDrawerOpen;
   final double bottomInset;
+  final bool isEnglish;
   final NavBarStyle style;
 
   @override
@@ -27,53 +29,59 @@ class SolidBottomNavBar extends StatelessWidget {
     final double leftInset = math.max(padding.left, 14.0);
     final double rightInset = math.max(padding.right, 14.0);
 
-    return IgnorePointer(
-      ignoring: isDrawerOpen,
-      child: ClipRect(
-        child: AnimatedAlign(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeInOut,
-          alignment: Alignment.topCenter,
-          heightFactor: isDrawerOpen ? 0.0 : 1.0,
-          child: AnimatedSlide(
+    return Directionality(
+      textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
+      child: IgnorePointer(
+        ignoring: isDrawerOpen,
+        child: ClipRect(
+          child: AnimatedAlign(
             duration: const Duration(milliseconds: 180),
             curve: Curves.easeInOut,
-            offset: isDrawerOpen ? const Offset(0, 1.0) : Offset.zero,
-            child: AnimatedOpacity(
+            alignment: Alignment.topCenter,
+            heightFactor: isDrawerOpen ? 0.0 : 1.0,
+            child: AnimatedSlide(
               duration: const Duration(milliseconds: 180),
               curve: Curves.easeInOut,
-              opacity: isDrawerOpen ? 0.0 : 1.0,
-              child: Container(
-                color: AppColors.softCream,
-                padding: EdgeInsets.only(
-                  left: leftInset,
-                  right: rightInset,
-                  top: 8,
-                  bottom: math.max(bottomInset, 8.0),
-                ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 520),
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: style.backgroundColor,
-                        borderRadius: BorderRadius.circular(style.borderRadius),
-                        border: style.border,
-                        boxShadow: style.shadows,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: NavTab.values
-                            .map(
-                              (NavTab tab) => NavTabItem(
-                                tab: tab,
-                                isActive: activeTab == tab,
-                                onTap: () => onTabSelected(tab),
-                                style: style,
-                              ),
-                            )
-                            .toList(),
+              offset: isDrawerOpen ? const Offset(0, 1.0) : Offset.zero,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeInOut,
+                opacity: isDrawerOpen ? 0.0 : 1.0,
+                child: Container(
+                  color: AppColors.softCream,
+                  padding: EdgeInsets.only(
+                    left: leftInset,
+                    right: rightInset,
+                    top: 8,
+                    bottom: math.max(bottomInset, 8.0),
+                  ),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 520),
+                      child: Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: style.backgroundColor,
+                          borderRadius: BorderRadius.circular(
+                            style.borderRadius,
+                          ),
+                          border: style.border,
+                          boxShadow: style.shadows,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: NavTab.values
+                              .map(
+                                (NavTab tab) => NavTabItem(
+                                  tab: tab,
+                                  isActive: activeTab == tab,
+                                  isEnglish: isEnglish,
+                                  onTap: () => onTabSelected(tab),
+                                  style: style,
+                                ),
+                              )
+                              .toList(),
+                        ),
                       ),
                     ),
                   ),

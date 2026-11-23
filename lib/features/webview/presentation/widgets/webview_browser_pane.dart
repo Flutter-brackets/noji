@@ -40,10 +40,12 @@ class _WebviewBrowserPaneState extends State<WebviewBrowserPane> {
     _pullController = PullToRefreshController(
       settings: PullToRefreshSettings(color: AppColors.primaryEmerald),
       onRefresh: () async {
-        defaultTargetPlatform == TargetPlatform.android
-            ? _controller?.reload()
-            : _controller?.loadUrl(
-                urlRequest: URLRequest(url: await _controller?.getUrl()));
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          _controller?.reload();
+        } else {
+          _controller?.loadUrl(
+              urlRequest: URLRequest(url: await _controller?.getUrl()));
+        }
       },
     );
   }
@@ -84,8 +86,9 @@ class _WebviewBrowserPaneState extends State<WebviewBrowserPane> {
         _pullController.endRefreshing();
         widget.onLoadStop(u?.toString());
       },
-      onUpdateVisitedHistory: (_, u, _) =>
-          widget.onUpdateVisitedHistory(u?.toString()),
+      onUpdateVisitedHistory: (_, u, _) {
+        widget.onUpdateVisitedHistory(u?.toString());
+      },
       onReceivedError: (_, _, _) {
         _pullController.endRefreshing();
         widget.onReceivedError();

@@ -9,33 +9,50 @@ class NavTabItem extends StatelessWidget {
     required this.tab,
     required this.isActive,
     required this.onTap,
+    this.isEnglish = false,
     this.style = NavBarStyle.current,
     super.key,
   });
 
   final NavTab tab;
   final bool isActive;
+  final bool isEnglish;
   final VoidCallback onTap;
   final NavBarStyle style;
 
   (IconData, IconData, String) get _tabMeta => switch (tab) {
-        NavTab.home => (Icons.home_outlined, Icons.home_rounded, 'الرئيسية'),
-        NavTab.categories =>
-          (Icons.grid_view_outlined, Icons.grid_view_rounded, 'الأقسام'),
-        NavTab.cart =>
-          (Icons.shopping_bag_outlined, Icons.shopping_bag_rounded, 'السلة'),
-        NavTab.account =>
-          (Icons.person_outline_rounded, Icons.person_rounded, 'حسابي'),
-      };
+    NavTab.home => (
+      Icons.home_outlined,
+      Icons.home_rounded,
+      isEnglish ? 'Home' : 'الرئيسية',
+    ),
+    NavTab.categories => (
+      Icons.grid_view_outlined,
+      Icons.grid_view_rounded,
+      isEnglish ? 'Categories' : 'الأقسام',
+    ),
+    NavTab.cart => (
+      Icons.shopping_bag_outlined,
+      Icons.shopping_bag_rounded,
+      isEnglish ? 'Cart' : 'السلة',
+    ),
+    NavTab.account => (
+      Icons.person_outline_rounded,
+      Icons.person_rounded,
+      isEnglish ? 'Account' : 'حسابي',
+    ),
+  };
 
   @override
   Widget build(BuildContext context) {
     final (IconData outline, IconData filled, String label) = _tabMeta;
     final bool isNarrow = MediaQuery.sizeOf(context).width <= 340.0;
-    final Color iconColor =
-        isActive ? style.activeIconColor : style.inactiveColor;
-    final Color labelColor =
-        isActive ? style.activeLabelColor : style.inactiveColor;
+    final Color iconColor = isActive
+        ? style.activeIconColor
+        : style.inactiveColor;
+    final Color labelColor = isActive
+        ? style.activeLabelColor
+        : style.inactiveColor;
 
     return Expanded(
       child: GestureDetector(

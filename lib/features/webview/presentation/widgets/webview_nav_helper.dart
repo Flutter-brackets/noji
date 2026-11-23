@@ -20,11 +20,7 @@ abstract final class WebviewNavHelper {
   } else if (bttBottom !== null) {
     minBottom = bttBottom;
   }
-  return JSON.stringify({
-    waBottom: waBottom,
-    bttBottom: bttBottom,
-    clearance: minBottom
-  });
+  return JSON.stringify({waBottom: waBottom, bttBottom: bttBottom, clearance: minBottom});
 })()
 ''').then((dynamic res) {
       debugPrint('[Noji Layout] WebView bottom edge == bar top edge: true');
@@ -35,15 +31,18 @@ abstract final class WebviewNavHelper {
   static Future<void> handleTabTap(
     InAppWebViewController? controller,
     NavTab tab,
-    NavTab? active,
-  ) async {
+    NavTab? active, {
+    String? currentUrl,
+  }) async {
+    if (controller == null) return;
     if (active == tab) {
-      final int? y = await controller?.getScrollY();
+      final int? y = await controller.getScrollY();
       y != null && y > 15
-          ? await controller?.scrollTo(x: 0, y: 0, animated: true)
-          : await controller?.reload();
+          ? await controller.scrollTo(x: 0, y: 0, animated: true)
+          : await controller.reload();
     } else {
-      await controller?.loadUrl(urlRequest: URLRequest(url: WebUri(tab.url)));
+      final String url = NavRoutes.getTabUrl(tab, currentUrl);
+      await controller.loadUrl(urlRequest: URLRequest(url: WebUri(url)));
     }
   }
 

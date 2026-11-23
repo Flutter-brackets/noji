@@ -19,6 +19,8 @@ class WebviewCubit extends Cubit<WebviewState> {
     _controller = controller;
   }
 
+  InAppWebViewController? get controller => _controller;
+
   void _initConnectivity() {
     _subscription = _connectivity.onConnectivityChanged
         .listen((List<ConnectivityResult> results) {
@@ -37,13 +39,9 @@ class WebviewCubit extends Cubit<WebviewState> {
       );
     } else {
       _controller?.setSettings(
-        settings: InAppWebViewSettings(
-          cacheMode: CacheMode.LOAD_DEFAULT,
-        ),
+        settings: InAppWebViewSettings(cacheMode: CacheMode.LOAD_DEFAULT),
       );
-      if (state.isOffline) {
-        emit(state.copyWith(isOffline: false));
-      }
+      if (state.isOffline) emit(state.copyWith(isOffline: false));
     }
   }
 
@@ -65,10 +63,7 @@ class WebviewCubit extends Cubit<WebviewState> {
   }
 
   void setOffline(bool offline) {
-    emit(state.copyWith(
-      isOffline: offline,
-      isLoading: false,
-    ));
+    emit(state.copyWith(isOffline: offline, isLoading: false));
   }
 
   void updateCanGoBack(bool canGoBack) {

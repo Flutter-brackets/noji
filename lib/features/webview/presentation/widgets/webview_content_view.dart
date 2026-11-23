@@ -74,7 +74,7 @@ class _WebviewContentViewState extends State<WebviewContentView> {
                   child: WebviewStackPane(
                     cubit: cubit,
                     onControllerCreated: (c) {
-                      _controller = c;
+                      setState(() => _controller = c);
                       cubit.attachController(c);
                     },
                     onLoadStop: _onLoadStop,
