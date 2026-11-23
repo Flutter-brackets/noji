@@ -31,6 +31,7 @@ class NavTabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (IconData outline, IconData filled, String label) = _tabMeta;
+    final bool isNarrow = MediaQuery.sizeOf(context).width <= 340.0;
     final Color iconColor =
         isActive ? style.activeIconColor : style.inactiveColor;
     final Color labelColor =
@@ -43,27 +44,34 @@ class NavTabItem extends StatelessWidget {
           HapticFeedback.lightImpact();
           onTap();
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            NavIndicatorLine(
-              isActive: isActive,
-              color: style.indicatorLineColor,
-            ),
-            const SizedBox(height: 2),
-            Icon(isActive ? filled : outline, size: 23, color: iconColor),
-            Text(
-              label,
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: 10.5,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: labelColor,
-                height: 1.1,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              NavIndicatorLine(
+                isActive: isActive,
+                color: style.indicatorLineColor,
               ),
-            ),
-            const SizedBox(height: 6),
-          ],
+              const SizedBox(height: 2),
+              Icon(isActive ? filled : outline, size: 23, color: iconColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: isNarrow ? 10.0 : 10.5,
+                    fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                    color: labelColor,
+                    height: 1.1,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 6),
+            ],
+          ),
         ),
       ),
     );

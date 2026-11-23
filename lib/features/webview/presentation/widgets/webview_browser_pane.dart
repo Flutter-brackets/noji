@@ -58,7 +58,9 @@ class _WebviewBrowserPaneState extends State<WebviewBrowserPane> {
         url: WebUri(AppConstants.baseUrl),
         cachePolicy: URLRequestCachePolicy.USE_PROTOCOL_CACHE_POLICY,
       ),
-      initialSettings: WebviewSettings.defaultSettings,
+      initialSettings: WebviewSettings.getSettings(
+        isTablet: MediaQuery.sizeOf(context).shortestSide >= 600.0,
+      ),
       initialUserScripts: DomCleanerScript.userScripts,
       pullToRefreshController: _pullController,
       onWebViewCreated: (InAppWebViewController c) {

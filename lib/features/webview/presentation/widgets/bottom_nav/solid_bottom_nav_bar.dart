@@ -23,6 +23,10 @@ class SolidBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EdgeInsets padding = MediaQuery.paddingOf(context);
+    final double leftInset = math.max(padding.left, 14.0);
+    final double rightInset = math.max(padding.right, 14.0);
+
     return IgnorePointer(
       ignoring: isDrawerOpen,
       child: ClipRect(
@@ -42,29 +46,36 @@ class SolidBottomNavBar extends StatelessWidget {
               child: Container(
                 color: AppColors.softCream,
                 padding: EdgeInsets.only(
-                  left: 14,
-                  right: 14,
+                  left: leftInset,
+                  right: rightInset,
                   top: 8,
                   bottom: math.max(bottomInset, 8.0),
                 ),
-                child: Container(
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: style.backgroundColor,
-                    borderRadius: BorderRadius.circular(style.borderRadius),
-                    border: style.border,
-                    boxShadow: style.shadows,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: NavTab.values
-                        .map((NavTab tab) => NavTabItem(
-                              tab: tab,
-                              isActive: activeTab == tab,
-                              onTap: () => onTabSelected(tab),
-                              style: style,
-                            ))
-                        .toList(),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520),
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: style.backgroundColor,
+                        borderRadius: BorderRadius.circular(style.borderRadius),
+                        border: style.border,
+                        boxShadow: style.shadows,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: NavTab.values
+                            .map(
+                              (NavTab tab) => NavTabItem(
+                                tab: tab,
+                                isActive: activeTab == tab,
+                                onTap: () => onTabSelected(tab),
+                                style: style,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ),
                 ),
               ),

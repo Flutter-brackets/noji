@@ -1,7 +1,8 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 abstract final class WebviewSettings {
-  static InAppWebViewSettings get defaultSettings => InAppWebViewSettings(
+  static InAppWebViewSettings getSettings({bool isTablet = false}) =>
+      InAppWebViewSettings(
         // Common
         cacheEnabled: true,
         domStorageEnabled: true,
@@ -25,12 +26,15 @@ abstract final class WebviewSettings {
         allowsInlineMediaPlayback: true,
         allowsBackForwardNavigationGestures: true,
         isFraudulentWebsiteWarningEnabled: true,
-        // User Agent
-        userAgent:
-            'Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 '
-            '(KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36 '
-            'NojiApp/1.0',
+        // User Agent: do not force phone UA on tablets/iPads
+        userAgent: isTablet
+            ? null
+            : 'Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 '
+                '(KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36 '
+                'NojiApp/1.0',
       );
+
+  static InAppWebViewSettings get defaultSettings => getSettings();
 
   static InAppWebViewSettings get offlineSettings => InAppWebViewSettings(
         cacheEnabled: true,

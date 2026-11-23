@@ -12,4 +12,5 @@ abstract final class AppConstants {
 
   static const String onboardingCacheKey = 'has_seen_onboarding';
   static const String logoAssetPath = 'assets/images/logo.png';
+  static const String poweredByHout = 'Powered by Hout';
 }

@@ -1,12 +1,11 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noji/core/responsive/responsive_context.dart';
 import 'package:noji/core/theme/app_colors.dart';
 import 'package:noji/features/onboarding/cubit/onboarding_cubit.dart';
-import 'package:noji/features/onboarding/cubit/onboarding_state.dart';
 import 'package:noji/features/onboarding/models/onboarding_item.dart';
-import 'package:noji/features/onboarding/presentation/widgets/line_page_indicator.dart';
-import 'package:noji/features/onboarding/presentation/widgets/onboarding_button.dart';
-import 'package:noji/features/onboarding/presentation/widgets/onboarding_privacy_link.dart';
+import 'package:noji/features/onboarding/presentation/widgets/onboarding_bottom_bar.dart';
 import 'package:noji/features/onboarding/presentation/widgets/onboarding_slide.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -29,6 +28,7 @@ class _OnboardingView extends StatelessWidget {
     final OnboardingCubit cubit = context.read<OnboardingCubit>();
     final double topPad = MediaQuery.paddingOf(context).top;
     final double bottomPad = MediaQuery.paddingOf(context).bottom;
+    final bool isTwoCol = context.isLandscape || !context.isCompact;
 
     return Scaffold(
       backgroundColor: AppColors.softCream,
@@ -64,40 +64,13 @@ class _OnboardingView extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            left: 24,
-            right: 24,
-            bottom: bottomPad + 20,
-            child: BlocBuilder<OnboardingCubit, OnboardingState>(
-              builder: (BuildContext ctx, OnboardingState state) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    LinePageIndicator(
-                      count: OnboardingItem.items.length,
-                      currentIndex: state.currentIndex,
-                    ),
-                    const SizedBox(height: 16),
-                    if (state.isLastPage) ...<Widget>[
-                      const OnboardingPrivacyLink(),
-                      const SizedBox(height: 14),
-                    ] else
-                      const SizedBox(height: 4),
-                    OnboardingButton(
-                      isLastPage: state.isLastPage,
-                      onPressed: () {
-                        if (state.isLastPage) {
-                          cubit.complete(ctx);
-                        } else {
-                          cubit.next();
-                        }
-                      },
-                    ),
-                  ],
-                );
-              },
+          if (!isTwoCol)
+            Positioned(
+              left: 24,
+              right: 24,
+              bottom: math.max(bottomPad, 10.0),
+              child: const OnboardingBottomBar(),
             ),
-          ),
         ],
       ),
     );

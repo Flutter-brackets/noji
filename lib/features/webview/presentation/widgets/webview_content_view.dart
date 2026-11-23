@@ -55,6 +55,7 @@ class _WebviewContentViewState extends State<WebviewContentView> {
   Widget build(BuildContext context) {
     final double topInset = MediaQuery.viewPaddingOf(context).top;
     final double bottomInset = MediaQuery.viewPaddingOf(context).bottom;
+    final EdgeInsets pad = MediaQuery.paddingOf(context);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: _overlayStyle,
@@ -65,36 +66,40 @@ class _WebviewContentViewState extends State<WebviewContentView> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: AppColors.softCream,
-          body: Column(
-            children: <Widget>[
-              WebviewTopStrip(topInset: topInset),
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    _browserPane,
-                    WebviewStatusOverlay(onRetry: () {
-                      context.read<WebviewCubit>().setOffline(false);
-                      _controller?.reload();
-                    }),
-                  ],
+          body: Padding(
+            padding: EdgeInsets.only(left: pad.left, right: pad.right),
+            child: Column(
+              children: <Widget>[
+                WebviewTopStrip(topInset: topInset),
+                Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      _browserPane,
+                      WebviewStatusOverlay(onRetry: () {
+                        context.read<WebviewCubit>().setOffline(false);
+                        _controller?.reload();
+                      }),
+                    ],
+                  ),
                 ),
-              ),
-              BlocBuilder<WebviewCubit, WebviewState>(
-                buildWhen: (p, c) =>
-                    p.isDrawerOpen != c.isDrawerOpen ||
-                    p.currentUrl != c.currentUrl,
-                builder: (ctx, state) {
-                  final NavTab? tab = NavRoutes.getTabFromUrl(state.currentUrl);
-                  return SolidBottomNavBar(
-                    activeTab: tab,
-                    onTabSelected: (t) =>
-                        WebviewNavHelper.handleTabTap(_controller, t, tab),
-                    isDrawerOpen: state.isDrawerOpen,
-                    bottomInset: bottomInset,
-                  );
-                },
-              ),
-            ],
+                BlocBuilder<WebviewCubit, WebviewState>(
+                  buildWhen: (p, c) =>
+                      p.isDrawerOpen != c.isDrawerOpen ||
+                      p.currentUrl != c.currentUrl,
+                  builder: (ctx, state) {
+                    final NavTab? tab =
+                        NavRoutes.getTabFromUrl(state.currentUrl);
+                    return SolidBottomNavBar(
+                      activeTab: tab,
+                      onTabSelected: (t) =>
+                          WebviewNavHelper.handleTabTap(_controller, t, tab),
+                      isDrawerOpen: state.isDrawerOpen,
+                      bottomInset: bottomInset,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

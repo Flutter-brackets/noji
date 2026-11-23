@@ -9,11 +9,16 @@ class InitialLoadingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.softCream,
+      alignment: Alignment.center,
       child: Center(
-        child: Image.asset(
-          AppConstants.logoAssetPath,
-          width: 120,
-          height: 120,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: Image.asset(
+            AppConstants.logoAssetPath,
+            width: 120,
+            height: 120,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );

@@ -39,20 +39,30 @@ abstract final class DomCleanerScript {
   removeBanners();
 
   function isDrawerActive() {
-    var drawer = document.getElementById('mobile-menu-drawer') ||
-                 document.querySelector('.mobile-menu-drawer');
-    if (drawer && (drawer.classList.contains('is-active') ||
-                   drawer.classList.contains('open') ||
-                   drawer.classList.contains('active'))) {
-      return true;
-    }
-    var overlay = document.getElementById('mobile-menu-overlay') ||
-                  document.querySelector('.mobile-menu-overlay');
-    if (overlay && (overlay.classList.contains('is-active') ||
-                    overlay.classList.contains('open') ||
-                    overlay.classList.contains('active'))) {
-      return true;
-    }
+    try {
+      var drawer = document.getElementById('mobile-menu-drawer') ||
+                   document.querySelector('.mobile-menu-drawer');
+      if (drawer) {
+        var ds = window.getComputedStyle(drawer);
+        if (ds.display !== 'none' && ds.visibility !== 'hidden' &&
+            (drawer.classList.contains('is-active') ||
+             drawer.classList.contains('open') ||
+             drawer.classList.contains('active'))) {
+          return true;
+        }
+      }
+      var overlay = document.getElementById('mobile-menu-overlay') ||
+                    document.querySelector('.mobile-menu-overlay');
+      if (overlay) {
+        var os = window.getComputedStyle(overlay);
+        if (os.display !== 'none' && os.visibility !== 'hidden' &&
+            (overlay.classList.contains('is-active') ||
+             overlay.classList.contains('open') ||
+             overlay.classList.contains('active'))) {
+          return true;
+        }
+      }
+    } catch (e) {}
     return false;
   }
 

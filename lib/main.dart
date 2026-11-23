@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/constants/app_constants.dart';
+import 'core/responsive/orientation_manager.dart';
 import 'core/services/cache_helper.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -37,9 +38,18 @@ class NojiApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       builder: (BuildContext context, Widget? child) {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: child ?? const SizedBox.shrink(),
+        OrientationManager.update(context);
+        final MediaQueryData data = MediaQuery.of(context);
+        final TextScaler clampedScaler = data.textScaler.clamp(
+          minScaleFactor: 0.9,
+          maxScaleFactor: 1.3,
+        );
+        return MediaQuery(
+          data: data.copyWith(textScaler: clampedScaler),
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: child ?? const SizedBox.shrink(),
+          ),
         );
       },
       home: const SplashScreen(),

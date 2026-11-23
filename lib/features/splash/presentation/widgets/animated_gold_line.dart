@@ -2,16 +2,25 @@ import 'package:flutter/material.dart';
 
 class AnimatedGoldLine extends StatelessWidget {
   final Animation<double> animation;
+  final double? maxWidth;
 
-  const AnimatedGoldLine({super.key, required this.animation});
+  const AnimatedGoldLine({
+    super.key,
+    required this.animation,
+    this.maxWidth,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final double targetWidth = maxWidth ??
+        ((MediaQuery.sizeOf(context).width * 0.38).clamp(130.0, 220.0) *
+            (110.0 / 150.0));
+
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
         return Container(
-          width: animation.value * 110.0,
+          width: animation.value * targetWidth,
           height: 1.5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(1),

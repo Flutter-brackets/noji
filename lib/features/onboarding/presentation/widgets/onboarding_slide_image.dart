@@ -59,6 +59,7 @@ class OnboardingSlideImage extends StatelessWidget {
                 child: Image.asset(
                   imagePath,
                   fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
                   errorBuilder: (_, _, _) => _buildFallback(),
                 ),
               ),
